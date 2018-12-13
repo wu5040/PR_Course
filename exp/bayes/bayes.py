@@ -23,7 +23,6 @@ def loadDataSet(intX):
 
     return groupList1,classVec1,groupList2,classVec2
 
-
 def createFeatureList(dataSet):
     featureSet = set()
     for item in dataSet:
@@ -83,7 +82,7 @@ plt.figure(figsize=(8,8))
 x=[]
 x.append(np.arange(130,200,1))
 x.append(np.arange(30,100,1))
-x.append(np.arange(30,50,1))
+x.append(np.arange(30,50,0.1))
 pn=[]
 pn.append(plt.subplot(311))
 pn.append(plt.subplot(312))
