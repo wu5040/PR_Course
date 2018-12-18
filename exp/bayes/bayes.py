@@ -77,7 +77,7 @@ def funImg(pn,x,mu,sigma2):
     pn.set_xlabel('Feature')
     pn.set_ylabel('Probability')
 
-plt.figure(figsize=(8,8))
+plt.figure(figsize=(10,10))
 
 x=[]
 x.append(np.arange(130,200,1))

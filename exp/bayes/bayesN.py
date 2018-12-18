@@ -82,11 +82,11 @@ mu2, sigma2 = GaussianFun(groupListFemale, lenData2)
 
 sigma1 = getSigma(lenData1, groupListMale, mu1)
 print("男生均值", mu1)
-print("男生方差", sigma1)
+print("男生标准差", sigma1)
 
 sigma2 = getSigma(lenData2, groupListFemale, mu2)
 print("女生均值", mu2)
-print("女生方差", sigma2)
+print("女生标准差", sigma2)
 
 x = np.arange(140, 200, 1)
 y = np.arange(30, 90, 1)
