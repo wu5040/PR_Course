@@ -7,9 +7,9 @@ from mpl_toolkits.mplot3d import Axes3D
 
 def loadDataSet(intX, intY):
     file_data1 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/boy.txt', delimiter='\t')
+        r'C:/111aaa/PR_Course/expData/genderdata/boy.txt', delimiter='\t')
     file_data2 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/girl.txt', delimiter='\t')
+        r'C:/111aaa/PR_Course/expData/genderdata/girl.txt', delimiter='\t')
 
     lenData1 = len(file_data1)
     groupListMale = np.empty([lenData1, 2], dtype=float)
