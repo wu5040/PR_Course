@@ -80,6 +80,9 @@ lenData1, groupListMale, classVecMale, lenData2, groupListFemale, classVecFemale
 mu1, sigma1 = GaussianFun(groupListMale, lenData1)
 mu2, sigma2 = GaussianFun(groupListFemale, lenData2)
 
+print("男生方差\n",sigma1)
+print("女生方差\n",sigma2)
+
 sigma1 = getSigma(lenData1, groupListMale, mu1)
 print("男生均值", mu1)
 print("男生标准差", sigma1)
