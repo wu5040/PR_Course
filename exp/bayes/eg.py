@@ -16,7 +16,9 @@ import numpy as np
 # ax.plot(x_list, y_list, color='r', linewidth=1, alpha=0.6)
 
 # plt.show()
-list1 = [[1, 3, 2], [3, 5, 4],[2,3,4]]
-array = np.array(list1)
-array=array[array[:,0].argsort()]
-print(array)
+# list1 = [[1, 3, 2], [3, 5, 4],[2,3,4]]
+# array = np.array(list1)
+# array=array[array[:,0].argsort()]
+# print(array)
+file=open(r"MALE.txt")
+file_data1 = np.loadtxt(file, delimiter='\t')

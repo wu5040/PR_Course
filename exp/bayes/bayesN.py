@@ -6,10 +6,9 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 def loadDataSet(intX, intY):
-    file_data1 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/MALE.txt', delimiter='\t')
-    file_data2 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/FEMALE.txt', delimiter='\t')
+    file_data1 = np.loadtxt(r'C:\111aaa\PR_Course\expData\genderdata\MALE.txt', delimiter='\t')
+
+    file_data2 = np.loadtxt(r'C:\111aaa\PR_Course\expData\genderdata\FEMALE.txt', delimiter='\t')
 
     lenData1 = len(file_data1)
     groupListMale = np.empty([lenData1, 2], dtype=float)
@@ -67,8 +66,6 @@ def getSigma(lenData, listX, mu):
     return sigma
 
 # normfun正态分布函数
-
-
 def normFun(x, y, mu, sigma):
     pdf = (np.exp(-((x - mu[0])**2) / (2 * sigma[0]**2)) / (sigma[0] * np.sqrt(2*np.pi))) * \
         (np.exp(-((y - mu[1])**2) / (2 * sigma[1]**2)) /

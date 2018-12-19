@@ -2,48 +2,27 @@ import numpy as np
 from math import sqrt
 import matplotlib.pyplot as plt
 
-# 创建实验样本集,intX--属性值
-
 
 def loadDataSet(intX):
+    '''
+        创建实验样本集,intX--属性值
+    '''
     file_data1 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/boy.txt', delimiter='\t')
+        r'C:\111aaa\PR_Course\expData\genderdata\MALE.txt', delimiter='\t')
     file_data2 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/girl.txt', delimiter='\t')
-
-    file_data3 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/boy82.txt', delimiter='\t')
-    file_data4 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/girl35.txt', delimiter='\t')
-
-    file_data5 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/boy83.txt', delimiter='\t')
-    file_data6 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/girl42.txt', delimiter='\t')
-
-    file_data7 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/boynew.txt', delimiter='\t')
-    file_data8 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/girlnew.txt', delimiter='\t')
-
-    file_data9 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/male2017.txt', delimiter='\t')
-    file_data10 = np.loadtxt(
-        r'/home/wsg/111aaa/PR_Course/expData/genderdata/female2017.txt', delimiter='\t')
+        r'C:\111aaa\PR_Course\expData\genderdata\FEMALE.txt', delimiter='\t')
 
     groupList1 = []
     classVec1 = []
-    for file_data in [file_data1,file_data3,file_data5,file_data7,file_data9]:
-        for dataItem in file_data:
-            groupList1.append(dataItem[intX])
-            classVec1.append(1)
+    for dataItem in file_data1:
+        groupList1.append(dataItem[intX])
+        classVec1.append(1)
 
     groupList2 = []
     classVec2 = []
-    for file_data in [file_data2,file_data4,file_data6,file_data8,file_data10]:
-        for dataItem in file_data:
-            groupList2.append(dataItem[intX])
-            classVec2.append(0)
+    for dataItem in file_data2:
+        groupList2.append(dataItem[intX])
+        classVec2.append(0)
 
     return groupList1, classVec1, groupList2, classVec2
 
@@ -64,10 +43,11 @@ def bagOfFeature2Vec(featureList, inputSet):
             print("the feature: %s is not in my FeatureList!" % item)
     return returnVec
 
-# normfun正态分布函数，mu: 均值，sigma:标准差，pdf:概率密度函数，np.exp():概率密度函数公式
-
 
 def normFun(x, mu, sigma):
+    '''
+        normfun正态分布函数，mu: 均值，sigma:标准差，pdf:概率密度函数，np.exp():概率密度函数公式
+    '''
     pdf = np.exp(-((x - mu)**2) / (2 * sigma**2)) / (sigma * np.sqrt(2*np.pi))
     return pdf
 
@@ -92,31 +72,16 @@ def GaussianFun(ListX, listClasses):
     return mu, sigma2
 
 
-def funImg(pn, x, mu, sigma2):
-
-    y1 = normFun(x, mu[0], sqrt(sigma2[0]))
-    y2 = normFun(x, mu[1], sqrt(sigma2[1]))
-
-    # 参数,颜色，线宽
-    pn.plot(x, y1, color='b', linewidth=3, label="male")
-    pn.plot(x, y2, color='r', linewidth=3, label="female")
-
-    pn.legend()
-    # pn.title('GaussianFun')
-    pn.set_xlabel('Feature')
-    pn.set_ylabel('Probability')
-
-
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(8, 5))
 
 x = []
 x.append(np.arange(130, 200, 1))
 x.append(np.arange(30, 100, 1))
 x.append(np.arange(30, 50, 0.1))
 pn = []
-pn.append(plt.subplot(311))
-pn.append(plt.subplot(312))
-pn.append(plt.subplot(313))
+pn.append([plt.subplot(321), plt.subplot(322)])
+pn.append([plt.subplot(323), plt.subplot(324)])
+pn.append([plt.subplot(325), plt.subplot(326)])
 
 
 for i in range(3):
@@ -127,6 +92,18 @@ for i in range(3):
     mu[0], sigma2[0] = GaussianFun(mListX, mListClasses)
     mu[1], sigma2[1] = GaussianFun(fListX, fListClasses)
 
-    funImg(pn[i], x[i], mu, sigma2)
+    # 概率密度函数
+    y1 = normFun(x[i], mu[0], sqrt(sigma2[0]))
+    y2 = normFun(x[i], mu[1], sqrt(sigma2[1]))
+    pn[i][0].plot(x[i], y1, color='b', linewidth=2, label="male")
+    pn[i][0].plot(x[i], y2, color='r', linewidth=2, label="female")
+    pn[i][0].legend()
+
+    # 后验概率函数
+    z1 = y1*0.5/(y1*0.5+y2*0.5)
+    z2 = y2*0.5/(y1*0.5+y2*0.5)
+    pn[i][1].plot(x[i], z1, color='b', linewidth=2, label="male")
+    pn[i][1].plot(x[i], z2, color='r', linewidth=2, label="female")
+    pn[i][1].legend()
 
 plt.show()
