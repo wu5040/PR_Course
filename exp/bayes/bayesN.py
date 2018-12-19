@@ -76,25 +76,38 @@ def normFun(x, y, mu, sigma):
 def classifyNB(x, y):
     lenData1, groupListMale, classVecMale, lenData2, groupListFemale, classVecFemale = loadDataSet(
         0, 1)
+    
+    #先验概率
+    priorP1=lenData1/(lenData1+lenData2)
+    priorP2=lenData2/(lenData1+lenData2)
+
+    #计算 mu,sigma
     mu1, sigma1 = GaussianFun(groupListMale, lenData1)
     mu2, sigma2 = GaussianFun(groupListFemale, lenData2)
     sigma1 = getSigma(lenData1, groupListMale, mu1)
     sigma2 = getSigma(lenData2, groupListFemale, mu2)
-    gXY = log(normFun(x, y, mu1, sigma1)) + log(0.5) - \
-        log(normFun(x, y, mu2, sigma2)) - log(0.5)
+
+    #判别函数
+    gXY = log(normFun(x, y, mu1, sigma1)) + log(priorP1) - \
+        log(normFun(x, y, mu2, sigma2)) - log(priorP2)
     if gXY >= 0:
         return 1
     else:
         return 0
 
 
-def LOO():
+def LOO(x,y):
     '''
         留一法
         返回TP,FN,FP,TN
     '''
     lenData1, groupListMale, classVecMale, lenData2, groupListFemale, classVecFemale = loadDataSet(
-        0, 1)
+        x, y)
+
+
+    #先验概率
+    priorP1=(lenData1-1)/(lenData1+lenData2-1)
+    priorP2=lenData2/(lenData1+lenData2-1)
 
     mu2, sigma2 = GaussianFun(groupListFemale, lenData2)
     sigma2 = getSigma(lenData2, groupListFemale, mu2)
@@ -106,12 +119,18 @@ def LOO():
         group = np.delete(groupListMale, i, axis=0)
         mu1, sigma1 = GaussianFun(group, lenData1-1)
         sigma1 = getSigma(lenData1-1, group, mu1)
-        gXY = log(normFun(x, y, mu1, sigma1)) + log(0.5) - \
-            log(normFun(x, y, mu2, sigma2)) - log(0.5)
+
+        gXY = log(normFun(x, y, mu1, sigma1)) + log(priorP1) - \
+            log(normFun(x, y, mu2, sigma2)) - log(priorP2)
 
         if gXY < 0:  # 判断错误
             errMale = errMale+1
         resArr1.append([gXY, 1])
+
+
+    #先验概率
+    priorP1=lenData1/(lenData1+lenData2-1)
+    priorP2=(lenData2-1)/(lenData1+lenData2-1)
 
     mu1, sigma1 = GaussianFun(groupListMale, lenData1)
     sigma1 = getSigma(lenData1, groupListMale, mu1)
@@ -120,10 +139,13 @@ def LOO():
         x = groupListFemale[i][0]
         y = groupListFemale[i][1]
         group = np.delete(groupListFemale, i, axis=0)
+
         mu2, sigma2 = GaussianFun(group, lenData2-1)
         sigma2 = getSigma(lenData2-1, group, mu2)
-        gXY = log(normFun(x, y, mu1, sigma1)) + log(0.5) - \
-            log(normFun(x, y, mu2, sigma2)) - log(0.5)
+
+        gXY = log(normFun(x, y, mu1, sigma1)) + log(priorP1) - \
+            log(normFun(x, y, mu2, sigma2)) - log(priorP2)
+            
         if gXY >= 0:  # 判断错误
             errFemale = errFemale+1
         resArr1.append([gXY, 0])
@@ -152,25 +174,33 @@ if __name__ == "__main__":
     z1 = normFun(x, y, mu1, sigma1)
     z2 = normFun(x, y, mu2, sigma2)
 
-    fig1 = plt.figure()
-    ax1 = Axes3D(fig1)
+    print(type(z1))
+    
+    
 
-    ax1.plot_surface(x, y, z1, cmap="rainbow")
-    ax1.plot_surface(x, y, z2, cmap="rainbow")
+    # fig1 = plt.figure()
+    # ax1 = Axes3D(fig1)
 
-    ax1.set_zlabel('Probability')  # 坐标轴
-    ax1.set_ylabel('weight')
-    ax1.set_xlabel('height')
+    # ax1.plot_surface(x, y, z1, cmap="rainbow")
+    # ax1.plot_surface(x, y, z2, cmap="rainbow")
 
-    fig2 = plt.figure()
-    ax2 = Axes3D(fig2)
+    # ax1.set_zlabel('Probability')  # 坐标轴
+    # ax1.set_ylabel('weight')
+    # ax1.set_xlabel('height')
 
-    z = z1*0.5+z2*0.5
+    # fig2 = plt.figure()
+    # ax2 = Axes3D(fig2)
 
-    ax2.plot_surface(x, y, (z1*0.5)/z, cmap="rainbow")
-    ax2.plot_surface(x, y, (z2*0.5)/z, cmap="rainbow")
-    ax2.set_zlabel('Probability')  # 坐标轴
-    ax2.set_ylabel('weight')
-    ax2.set_xlabel('height')
+    # #先验概率
+    # priorP1=lenData1/(lenData1+lenData2)
+    # priorP2=lenData2/(lenData1+lenData2)
+    
+    # z = z1*priorP1+z2*priorP2
 
-    plt.show()
+    # ax2.plot_surface(x, y, (z1*priorP1)/z, cmap="rainbow")
+    # ax2.plot_surface(x, y, (z2*priorP2)/z, cmap="rainbow")
+    # ax2.set_zlabel('Probability')  # 坐标轴
+    # ax2.set_ylabel('weight')
+    # ax2.set_xlabel('height')
+
+    # plt.show()
