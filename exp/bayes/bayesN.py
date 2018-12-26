@@ -73,9 +73,13 @@ def normFun(x, y, mu, sigma):
     return pdf
 
 
-def classifyNB(x, y):
+def trainNB(x, y):
+    '''
+        x,y: feature
+        return priorP1,priorP2,mu1,sigma1,mu2,sigma2
+    '''
     lenData1, groupListMale, classVecMale, lenData2, groupListFemale, classVecFemale = loadDataSet(
-        0, 1)
+        x, y)
     
     #先验概率
     priorP1=lenData1/(lenData1+lenData2)
@@ -87,12 +91,16 @@ def classifyNB(x, y):
     sigma1 = getSigma(lenData1, groupListMale, mu1)
     sigma2 = getSigma(lenData2, groupListFemale, mu2)
 
+    return priorP1,priorP2,mu1,sigma1,mu2,sigma2
+
+def classifyNB(x,y,priorP1,priorP2,mu1,sigma1,mu2,sigma2):
     #判别函数
     gXY = log(normFun(x, y, mu1, sigma1)) + log(priorP1) - \
         log(normFun(x, y, mu2, sigma2)) - log(priorP2)
+
     if gXY >= 0:
         return 1
-    else:
+    elif gXY < 0:
         return 0
 
 
@@ -174,33 +182,41 @@ if __name__ == "__main__":
     z1 = normFun(x, y, mu1, sigma1)
     z2 = normFun(x, y, mu2, sigma2)
 
-    print(type(z1))
+
+    fig1 = plt.figure()
+    ax1 = Axes3D(fig1)
+
+    ax1.plot_surface(x, y, z1, cmap="rainbow")
+    ax1.plot_surface(x, y, z2, cmap="rainbow")
+
+    ax1.set_zlabel('Probability')  # 坐标轴
+    ax1.set_ylabel('weight')
+    ax1.set_xlabel('height')
+
+    fig2 = plt.figure()
+    ax2 = Axes3D(fig2)
+
+    #先验概率
+    priorP1=lenData1/(lenData1+lenData2)
+    priorP2=lenData2/(lenData1+lenData2)
     
-    
+    z = z1*priorP1+z2*priorP2
 
-    # fig1 = plt.figure()
-    # ax1 = Axes3D(fig1)
+    ax2.plot_surface(x, y, (z1*priorP1)/z, cmap="rainbow")
+    ax2.plot_surface(x, y, (z2*priorP2)/z, cmap="rainbow")
+    ax2.set_zlabel('Probability')  # 坐标轴
+    ax2.set_ylabel('weight')
+    ax2.set_xlabel('height')
 
-    # ax1.plot_surface(x, y, z1, cmap="rainbow")
-    # ax1.plot_surface(x, y, z2, cmap="rainbow")
+    # zz=(z1*priorP1)/z-(z2*priorP2)/z
+    # print(zz)
 
-    # ax1.set_zlabel('Probability')  # 坐标轴
-    # ax1.set_ylabel('weight')
-    # ax1.set_xlabel('height')
+    # plt.figure()
+    # plt.contourf(x,y,(z1*priorP1)/z)
+    # plt.contour(x,y,(z1*priorP1)/z)
 
-    # fig2 = plt.figure()
-    # ax2 = Axes3D(fig2)
+    # plt.figure()
+    # plt.contourf(x,y,(z2*priorP2)/z)
+    # plt.contour(x,y,(z2*priorP2)/z)
 
-    # #先验概率
-    # priorP1=lenData1/(lenData1+lenData2)
-    # priorP2=lenData2/(lenData1+lenData2)
-    
-    # z = z1*priorP1+z2*priorP2
-
-    # ax2.plot_surface(x, y, (z1*priorP1)/z, cmap="rainbow")
-    # ax2.plot_surface(x, y, (z2*priorP2)/z, cmap="rainbow")
-    # ax2.set_zlabel('Probability')  # 坐标轴
-    # ax2.set_ylabel('weight')
-    # ax2.set_xlabel('height')
-
-    # plt.show()
+    plt.show()
