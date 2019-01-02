@@ -65,35 +65,37 @@ m2 = FP+TN
 array = np.array(res)
 array = array[array[:, 0].argsort()]
 
-x = 0
-y = 0
-x_list = [0, ]
-y_list = [0, ]
+# print((TP+TN)/(TP+FN+FP+TN)*100,'%')
 
-for item in reversed(array):
-    if item[1] == 1:
-        y = y+1/m1
-    else:
-        x = x+1/m2
-    x_list.append(x)
-    y_list.append(y)
+# x = 0
+# y = 0
+# x_list = [0, ]
+# y_list = [0, ]
 
-# 求AUC
-sum = 0
-for i in range(len(x_list)-1):
-    sum = sum+(x_list[i+1]-x_list[i])*(y_list[i]+y_list[i+1])
-AUC = 0.5*sum
-print("AUC=", AUC)
+# for item in reversed(array):
+#     if item[1] == 1:
+#         y = y+1/m1
+#     else:
+#         x = x+1/m2
+#     x_list.append(x)
+#     y_list.append(y)
 
-# 绘制ROC曲线
-plt.figure('ROC')
-ax = plt.gca()
+# # 求AUC
+# sum = 0
+# for i in range(len(x_list)-1):
+#     sum = sum+(x_list[i+1]-x_list[i])*(y_list[i]+y_list[i+1])
+# AUC = 0.5*sum
+# print("AUC=", AUC)
 
-ax.set_xlabel('x')
-ax.set_ylabel('y')
+# # 绘制ROC曲线
+# plt.figure('ROC')
+# ax = plt.gca()
 
-ax.plot(x_list, y_list, linewidth=2, alpha=1,
-        label="AUC= %0.5f" % AUC)
+# ax.set_xlabel('x')
+# ax.set_ylabel('y')
 
-plt.legend()
-plt.show()
+# ax.plot(x_list, y_list, linewidth=2, alpha=1,
+#         label="AUC= %0.5f" % AUC)
+
+# plt.legend()
+# plt.show()

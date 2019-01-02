@@ -56,7 +56,8 @@ print(omega)
 x_list=[]
 y_list=[]
 
-while(True):
+i=0
+while(i<1000):
     errSum = 0
     change = 0
     for x in groupListMale:
@@ -75,9 +76,10 @@ while(True):
     x_list.append(a)
     y_list.append(b)
 
-    if change<20:
-        break
+    # if change<20:
+    #     break
     omega += errSum.T
+    i+=1
 
 print(omega)
 a=np.array(omega)[0][0]
@@ -87,10 +89,12 @@ c=np.array(omega)[0][2]
 x=np.arange(0,1,0.01)
 y=(-a*x-c)/b
 
-# plt.plot(x,y)
-# plt.scatter(arrMale[0], arrMale[1], c='b', s=10, marker='v', label='Male')
-# plt.scatter(-arrFemale[0], -arrFemale[1], c='r', s=10, marker='v', label='Female')
+plt.figure()
+plt.plot(x,y)
+plt.scatter(arrMale[0], arrMale[1], c='b', s=10, marker='v', label='Male')
+plt.scatter(-arrFemale[0], -arrFemale[1], c='r', s=10, marker='v', label='Female')
 
+plt.figure()
 plt.plot(x_list, y_list)
 
 plt.show()
