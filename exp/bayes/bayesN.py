@@ -182,7 +182,6 @@ if __name__ == "__main__":
     z1 = normFun(x, y, mu1, sigma1)
     z2 = normFun(x, y, mu2, sigma2)
 
-
     fig1 = plt.figure()
     ax1 = Axes3D(fig1)
 

@@ -1,5 +1,6 @@
 from sklearn import svm
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.model_selection import train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -41,24 +42,28 @@ def plot_contours(ax, clf, xx, yy, **params):
 
 
 file_data = np.loadtxt(
-    r'/Users/wsg/Documents/PR_Course/expData/studentdataset.csv', delimiter=',')
+    r'C:\111aaa\PR_Course\expData\studentdataset.csv', delimiter=',')
+
 
 # 身高、体重、鞋码
 dataX = file_data[:, 0:2]
 # 性别
 label = file_data[:, 3]
 
+train,test,train_label,test_label=train_test_split(dataX,label,random_state=1,train_size=0.618)
+
+
 C = 1.0
 models = (svm.SVC(kernel='linear', C=C),
-          svm.LinearSVC(C=C),
-          svm.SVC(kernel='rbf', gamma=0.5, C=1),
+          svm.SVC(kernel='sigmoid',gamma='scale',coef0=0.0,C=C),
+          svm.SVC(kernel='rbf', gamma='scale', C=C),
           svm.SVC(kernel='poly', degree=3, C=C))
 
-models = (clf.fit(dataX, label) for clf in models)
+models = (clf.fit(train, train_label) for clf in models)
 
 # title for the plots
 titles = ('SVC with linear kernel',
-          'LinearSVC (linear kernel)',
+          'SVC with sigmoid kernel',
           'SVC with RBF kernel',
           'SVC with polynomial (degree 3) kernel')
 
@@ -79,5 +84,7 @@ for clf, title, ax in zip(models, titles, sub.flatten()):
     ax.set_xticks(())
     ax.set_yticks(())
     ax.set_title(title)
+
+
 
 plt.show()
